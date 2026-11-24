@@ -1,0 +1,72 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Staff {
+protected:
+    string name;
+    int id;
+
+public:
+    Staff(string n, int i) : name(n), id(i) {}
+
+    virtual double pay() const = 0;
+
+    virtual void display() const {
+        cout << "Name: " << name
+             << "\nID: " << id
+             << "\nPay: " << pay() << "\n\n";
+    }
+
+    virtual ~Staff() {}
+};
+
+class Professor : public Staff {
+    double basic, research;
+
+public:
+    Professor(string n, int i, double b, double r)
+        : Staff(n, i), basic(b), research(r) {}
+
+    double pay() const override {
+        return basic * 1.42 + research;
+    }
+};
+
+class LabAssistant : public Staff {
+    double basic;
+
+public:
+    LabAssistant(string n, int i, double b)
+        : Staff(n, i), basic(b) {}
+
+    double pay() const override {
+        return basic * 1.42;
+    }
+};
+
+class GuestFaculty : public Staff {
+    double hours, rate;
+
+public:
+    GuestFaculty(string n, int i, double h, double r)
+        : Staff(n, i), hours(h), rate(r) {}
+
+    double pay() const override {
+        return hours * rate;
+    }
+};
+
+int main() {
+    Professor p("Kavya", 101, 50000, 5000);
+    LabAssistant l("Ravi", 102, 30000);
+    GuestFaculty g("Meena", 103, 20, 800);
+
+    Staff* staff[] = {&p, &l, &g};
+
+    for (int i = 0; i < 3; i++) {
+        staff[i]->display();
+    }
+
+    return 0;
+}
